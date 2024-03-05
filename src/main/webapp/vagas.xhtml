@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xml:lang="en"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+        .ui-widget-content {
+            border: 0px;
+        }
+        .ui-panelgrid .ui-panelgrid-cell{
+            border: 0px;
+        }
+    </style>
+    <script type="text/javascript">
+        //<![CDATA[
+        function start() {
+            PF('statusDialog').show();
+        }
+
+        function stop() {
+            PF('statusDialog').hide();
+        }
+
+        //]]>
+    </script>
+    <title>Lista de vagas</title>
+</h:head>
+<f:view>
+    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false"
+              resizable="false">
+        <p:graphicImage name="/images/ajaxloadingbar.gif"/>
+    </p:dialog>
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+    <h:body>
+        <h:form id="formVagas" prependId="false">
+
+            <p:commandButton value="Nova Vaga"  update=":formVagas:VagaNew"
+                             oncomplete="PF('itemNewDialog').show()"/>
+            <p:growl id="mensagens" showDetail="true" autoUpdate="true" closable="true">
+                <p:autoUpdate/>
+            </p:growl>
+            <p:dataTable id="tabelaVaga" var="item" value="#{vagaMB.vagas}" prependId="false"
+                         paginator="true" rows="10" emptyMessage="Não há vagas cadastrados."
+                         rowKey="#{item.id}" selectionMode="single"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                         {RowsPerPageDropdown} {Exporters}"
+                         selection="#{vagaMB.vaga}"
+                         rowsPerPageTemplate="10,15,25,50,100">
+                <f:facet name="header"><p:outputLabel value="Lista de Vagas: #{vagaMB.tamanhoDaLista}"/> </f:facet>
+                <p:column headerText="Id" style="width: 6%;" sortBy="#{item.id}">
+                    <h:outputText id="outputId" value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Quantidade" style="width: 10%;" sortBy="#{item.quantidade}">
+                    <h:outputText id="outputQuantidade"
+                                  value="#{item.quantidade}"/>
+                </p:column>
+                <p:column headerText="Data Início" style="width: 10%;" sortBy="#{item.inicio}">
+                    <h:outputText id="outputInicio" value="#{item.inicio}"/>
+                </p:column>
+                <p:column headerText="Data Fim" style="width: 10%;" sortBy="#{item.fim}">
+                    <h:outputText id="outputFim" value="#{item.fim}"/>
+                </p:column>
+                <p:column style="width:10%;text-align: center" headerText="Ações" exportable="false">
+                    <p:commandButton update="@form" icon="ui-icon-trash" title="Excluir" action="#{vagaMB.excluir(item)}"/>
+                </p:column>
+            </p:dataTable>
+
+            <p:dialog header="Novo vaga" widgetVar="itemNewDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false" id="modal">
+                <p:outputPanel id="VagaNew" style="text-align:center; border: 0px">
+                    <p:panelGrid columns="2" columnClasses="label,value">
+                        <h:outputText value="Quantidade" style="text-align:left;" />
+                        <p:inputNumber id="quantidade" value="#{vagaMB.vagaNova.quantidade}"/>
+
+                        <h:outputText value="Data Início" style="text-align:left;" />
+                        <p:calendar id="inicio" value="#{vagaMB.vagaNova.inicio}" mode="popup" />
+
+                        <h:outputText value="Data Fim" style="text-align:left;" />
+                        <p:calendar id="fim" value="#{vagaMB.vagaNova.fim}" mode="popup" />
+
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="label,value">
+                        <p:button id="btnFecharNovo" value="Fechar" icon="ui-icon-close"/>
+                        <p:commandButton id="btnSalvar" value="Salvar" action="#{vagaMB.salvarDocumento}"
+                                         icon="ui-icon-pencil" update="@form"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</f:view>
+</html>

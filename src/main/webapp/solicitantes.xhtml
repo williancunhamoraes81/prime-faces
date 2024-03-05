@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xml:lang="en"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+        .ui-widget-content {
+            border: 0px;
+        }
+        .ui-panelgrid .ui-panelgrid-cell{
+            border: 0px;
+        }
+    </style>
+    <script type="text/javascript">
+        //<![CDATA[
+        function start() {
+            PF('statusDialog').show();
+        }
+
+        function stop() {
+            PF('statusDialog').hide();
+        }
+
+        //]]>
+    </script>
+    <title>Lista de Solicitantes</title>
+</h:head>
+<f:view>
+    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false"
+              resizable="false">
+        <p:graphicImage name="/images/ajaxloadingbar.gif"/>
+    </p:dialog>
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+    <h:body>
+        <h:form id="formSolicitantes" prependId="false">
+
+            <p:commandButton value="Novo Solicitante"  update=":formSolicitantes:solicitanteNew"
+                             oncomplete="PF('itemNewDialog').show()"/>
+            <p:growl id="mensagens" showDetail="true" autoUpdate="true" closable="true">
+                <p:autoUpdate/>
+            </p:growl>
+            <p:dataTable id="tabelaSolicitante" var="item" value="#{solicitanteMB.solicitantes}" prependId="false"
+                         paginator="true" rows="10" emptyMessage="Não há solicitantes cadastrados."
+                         rowKey="#{item.id}" selectionMode="single"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                         {RowsPerPageDropdown} {Exporters}"
+                         selection="#{solicitanteMB.solicitante}"
+                         rowsPerPageTemplate="10,15,25,50,100">
+                <f:facet name="header"><p:outputLabel value="Lista de Solicitantes: #{solicitanteMB.tamanhoDaLista}"/> </f:facet>
+                <p:column headerText="Id" style="width: 6%;" sortBy="#{item.id}">
+                    <h:outputText id="outputId" value="#{item.id}"/>
+                </p:column>
+                <p:column headerText="Nome" style="width: 25%;" sortBy="#{item.nome}">
+                    <h:outputText id="outputNome"
+                                  value="#{item.nome}"/>
+                </p:column>
+                <p:column style="width:10%;text-align: center" headerText="Ações" exportable="false">
+                    <p:commandButton update=":formSolicitantes:solicitanteDetail" oncomplete="PF('itemDialog').show()"
+                                     icon="ui-icon-search"
+                                     title="Detalhe">
+                        <f:setPropertyActionListener value="#{item}" target="#{solicitanteMB.solicitante}"/>
+                    </p:commandButton>
+                    <p:commandButton update="@form" icon="ui-icon-trash" title="Excluir" action="#{solicitanteMB.excluir(item)}"/>
+                </p:column>
+            </p:dataTable>
+            <p:dialog header="Detalhes do Solicitante" widgetVar="itemDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="solicitanteDetail" style="text-align:center;">
+                    <p:panelGrid columns="2" rendered="#{not empty solicitanteMB.solicitante}" columnClasses="label,value">
+                        <h:outputText value="Id"/>
+                        <h:inputText value="#{solicitanteMB.solicitante.id}" disabled="#{true}"/>
+
+                        <h:outputText value="Nome"/>
+                        <h:inputText value="#{solicitanteMB.solicitante.nome}" disabled="true"/>
+
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="label,value">
+                        <p:button id="btnFechar" value="Fechar" icon="ui-icon-close"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+            <p:dialog header="Novo Solicitante" widgetVar="itemNewDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false" id="modal">
+                <p:outputPanel id="solicitanteNew" style="text-align:center; border: 0px">
+                    <p:panelGrid columns="2" columnClasses="label,value">
+                        <h:outputText value="Nome" required="true"/>
+                        <h:inputText id="nome" value="#{solicitanteMB.solicitanteNovo.nome}"/>
+                        <p:messages for="nome"/>
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="label,value">
+                        <p:button id="btnFecharNovo" value="Fechar" icon="ui-icon-close"/>
+                        <p:commandButton id="btnSalvar" value="Salvar" action="#{solicitanteMB.salvarDocumento}"
+                                         icon="ui-icon-pencil" update="@form"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</f:view>
+</html>
