@@ -23,8 +23,10 @@ git clone https://github.com/williancunhamoraes81/prime-faces.git
 
 #### 🚢 Iniciando serviços necessários
 1- mvn clean install -DskipTests.
+<br>
 2- Inicie a aplicação Java
-3- <a href="https://localhost:9292/solicitante.xhtml">Solicitantes</a>
+<br>
+3- Abrir página da aplicação através do link <a href="https://localhost:9292/solicitante.xhtml">Solicitantes</a>
 
 <br/><br/>
 
