@@ -26,7 +26,7 @@ git clone https://github.com/williancunhamoraes81/prime-faces.git
 <br>
 2- Inicie a aplicação Java
 <br>
-3- Abrir página da aplicação através do link <a href="https://localhost:9292/inicio.xhtml">Solicitantes</a>
+3- Abrir página da aplicação através do link <a href="https://localhost:9292/inicio.xhtml">Página Inicial</a>
 
 <br/><br/>
 
