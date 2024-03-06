@@ -2,6 +2,7 @@ package com.teste.pratico.beans;
 
 import com.teste.pratico.modelo.Solicitante;
 import com.teste.pratico.repositorio.SolicitanteRepositorio;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Named(value = "solicitanteMB")
 @ViewScoped
+@EqualsAndHashCode
 public class SolicitanteMB {
 
     @Getter
@@ -63,4 +65,5 @@ public class SolicitanteMB {
     public void setTamanhoDaLista(Integer size) {
         // Método criado para ser utilizado pelo primefaces
     }
+
 }

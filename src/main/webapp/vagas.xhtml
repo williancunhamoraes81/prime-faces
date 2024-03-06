@@ -40,6 +40,7 @@
 
             <p:commandButton value="Nova Vaga"  update=":formVagas:VagaNew"
                              oncomplete="PF('itemNewDialog').show()"/>
+            <p:button value="Voltar" outcome="inicio" />
             <p:growl id="mensagens" showDetail="true" autoUpdate="true" closable="true">
                 <p:autoUpdate/>
             </p:growl>
@@ -59,10 +60,14 @@
                                   value="#{item.quantidade}"/>
                 </p:column>
                 <p:column headerText="Data Início" style="width: 10%;" sortBy="#{item.inicio}">
-                    <h:outputText id="outputInicio" value="#{item.inicio}"/>
+                    <h:outputText id="outputInicio" value="#{item.inicio}">
+                        <f:convertDateTime dateStyle="long" pattern="dd/MM/yyyy" />
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="Data Fim" style="width: 10%;" sortBy="#{item.fim}">
-                    <h:outputText id="outputFim" value="#{item.fim}"/>
+                    <h:outputText id="outputFim" value="#{item.fim}">
+                        <f:convertDateTime dateStyle="long" pattern="dd/MM/yyyy" />
+                    </h:outputText>
                 </p:column>
                 <p:column style="width:10%;text-align: center" headerText="Ações" exportable="false">
                     <p:commandButton update="@form" icon="ui-icon-trash" title="Excluir" action="#{vagaMB.excluir(item)}"/>

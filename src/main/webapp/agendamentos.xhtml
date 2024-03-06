@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+        xmlns:h="http://xmlns.jcp.org/jsf/html"
+        xmlns:p="http://primefaces.org/ui"
+        xml:lang="en"
+        xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head>
+    <style>
+        .ui-widget-content {
+            border: 0px;
+        }
+        .ui-panelgrid .ui-panelgrid-cell{
+            border: 0px;
+        }
+        .ui-widget-header .ui-inputfield, .ui-widget-content .ui-inputfield {
+            font-weight: normal;
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript">
+        //<![CDATA[
+        function start() {
+            PF('statusDialog').show();
+        }
+
+        function stop() {
+            PF('statusDialog').hide();
+        }
+
+        //]]>
+    </script>
+    <title>Lista de Agendamentos</title>
+</h:head>
+<f:view>
+    <p:dialog modal="true" widgetVar="statusDialog" header="Status" draggable="false" closable="false"
+              resizable="false">
+        <p:graphicImage name="/images/ajaxloadingbar.gif"/>
+    </p:dialog>
+    <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()"/>
+    <h:body>
+        <h:form id="formAgendamentos" prependId="false">
+
+            <p:commandButton value="Novo Agendamento"  update=":formAgendamentos:AgendamentoNew"
+                             oncomplete="PF('itemNewDialog').show()"/>
+            <p:button value="Voltar" outcome="inicio" />
+            <p:growl id="mensagens" showDetail="true" autoUpdate="true" closable="true">
+                <p:autoUpdate/>
+            </p:growl>
+            <p:dataTable id="tabelaAgendamento" var="item" value="#{agendamentoMB.agendamentos}" prependId="false"
+                         paginator="true" rows="10" emptyMessage="Não há agendamentos cadastrados."
+                         rowKey="#{item.id}" selectionMode="single"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}
+                         {RowsPerPageDropdown} {Exporters}"
+                         selection="#{agendamentoMB.agendamento}"
+                         rowsPerPageTemplate="10,15,25,50,100">
+                <f:facet name="header"><p:outputLabel value="Lista de Agendamentos: #{agendamentoMB.tamanhoDaLista}"/> </f:facet>
+                <p:column headerText="Id" style="width: 6%;" sortBy="#{item.id}">
+                    <h:outputText id="outputId" value="#{item.id}"/>
+                </p:column>
+
+                <p:column headerText="Solicitante" sortBy="#{item.solicitante.nome}">
+                    <h:outputText id="solicitante" value="#{item.solicitante.nome}"/>
+                </p:column>
+
+                <p:column headerText="Número" style="width: 15%;" sortBy="#{item.numero}">
+                    <h:outputText id="numero" value="#{item.numero}"/>
+                </p:column>
+
+                <p:column headerText="Motivo" style="width: 25%;" sortBy="#{item.motivo}">
+                    <h:outputText id="motivo" value="#{item.motivo}"/>
+                </p:column>
+
+                <p:column headerText="Data" style="width: 10%;" sortBy="#{item.data}">
+                    <h:outputText id="data" value="#{item.data}">
+                        <f:convertDateTime dateStyle="long" pattern="dd/MM/yyyy" />
+                    </h:outputText>
+                </p:column>
+
+                <p:column style="width:10%;text-align: center" headerText="Ações" exportable="false">
+                    <p:commandButton update="@form" icon="ui-icon-trash" title="Excluir" action="#{agendamentoMB.excluir(item)}"/>
+                </p:column>
+            </p:dataTable>
+
+
+            <p:dialog header="Detalhes do Agendamento" widgetVar="itemNewDialog" modal="true" showEffect="fade" hideEffect="fade"
+                      resizable="false">
+                <p:outputPanel id="AgendamentoNew" style="text-align:center;">
+                    <p:panelGrid columns="2" columnClasses="label,value">
+
+                        <h:outputText value="Data" style="text-align:left;" />
+                        <p:calendar id="data" style="width: 100%;" value="#{agendamentoMB.agendamentoNovo.data}" mode="popup" />
+
+                        <h:outputText value="Número" style="text-align:left;" />
+                        <h:inputText id="numero" style="width: 100%;" value="#{agendamentoMB.agendamentoNovo.numero}"/>
+
+                        <h:outputText value="Motivo" style="text-align:left;"/>
+                        <h:inputText id="motivo" style="width: 100%;" value="#{agendamentoMB.agendamentoNovo.motivo}"/>
+
+                        <h:outputText value="Solicitante" style="text-align:left;" />
+                        <p:selectOneMenu id="solicitante" value="#{agendamentoMB.idSolicitanteSelecionado}" converter="#{solicitanteConverter}">
+                            <f:selectItem itemLabel="Selecione" itemValue="#{null}" />
+                            <f:selectItems value="#{agendamentoMB.solicitantes}" var="s"
+                                           itemLabel="#{s.nome}" itemValue="#{s.id}" />
+                        </p:selectOneMenu>
+
+                    </p:panelGrid>
+                    <p:panelGrid columns="2" columnClasses="label,value">
+                        <p:button id="btnFechar" value="Fechar" icon="ui-icon-close"/>
+                        <p:commandButton id="btnSalvar" value="Salvar" action="#{agendamentoMB.salvarDocumento}"
+                                         icon="ui-icon-pencil" update="@form"/>
+                    </p:panelGrid>
+                </p:outputPanel>
+            </p:dialog>
+
+        </h:form>
+    </h:body>
+</f:view>
+</html>

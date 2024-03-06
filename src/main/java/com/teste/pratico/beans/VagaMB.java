@@ -12,8 +12,11 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Named(value = "vagaMB")
@@ -41,7 +44,7 @@ public class VagaMB {
         return vagas;
     }
 
-    public void salvarDocumento() {
+    public void salvarDocumento() throws ParseException {
         repositorio.save(Vaga.builder()
                         .quantidade(vagaNova.getQuantidade())
                         .inicio(vagaNova.getInicio())
