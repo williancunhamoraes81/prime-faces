@@ -12,6 +12,8 @@ Aplicação consiste no desenvolvimento de um CRUD de agendamento utilizando Pri
 - 📦 Maven
 - 🐘 HsqlDB
 - ⚙️ PrimeFaces
+- ![image](https://github.com/williancunhamoraes81/prime-faces/assets/72080283/70bbbf2a-a6e0-4740-ac39-4d1940bb8c8a) IntelliJ
+
 
 <br/><br/>
 #### 📋 Clonando repositório
