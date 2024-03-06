@@ -22,7 +22,7 @@ git clone https://github.com/williancunhamoraes81/prime-faces.git
 <br/><br/>
 
 #### 🚢 Iniciando serviços necessários
-1- mvn clean install -DskipTests.
+1- mvn clean install -DskipTests
 <br>
 2- Inicie a aplicação Java
 <br>
